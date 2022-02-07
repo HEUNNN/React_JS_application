@@ -46,4 +46,4 @@ const noTopping = ['촉촉', '안촉촉'];
 const topping = ['블루베리', '딸기', '초코', '바나나'];
 //두개의 배열을 합칠때 concat 메서드를 사용해도 되지만, spread 연산자를 사용해도 됨
 const allCookie = [...noTopping,'함정 쿠키', ...topping];
-console.log(allCookie); //[ '촉촉', '안촉촉', '블루베리', '딸기', '초코', '바나나' ]
+console.log(allCookie); //[ '촉촉', '안촉촉', '함정 쿠키', '블루베리', '딸기', '초코', '바나나' ]
