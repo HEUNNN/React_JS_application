@@ -1,4 +1,5 @@
-import { useState } from "react"; //react의 useState 기능
+import { useRef, useState } from "react"; //react의 useState 기능
+//useRef: DOM 요소를 선택할 수 있는 기능 -> react가 제공
 
 const DiaryEditor = () => {
   //사용자 정보를 입력 받는 기능을 가진 컴포넌트
@@ -13,8 +14,22 @@ const DiaryEditor = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const authorInput = useRef();
+  const contentInput = useRef();
   const handleSubmit = () => {
-    console.log(state);
+    if (state.author.length < 1) {
+      //focus
+      authorInput.current.focus();
+      /*current: Dom 요소를 선택하는 ref 객체인 authorInput가
+      현재 가리키는 값을 불러와서 사용할 수 있도록 해주는 property
+      authorInput.current = authorInput tag*/
+      return; //진행 방지
+    }
+    if (state.content.length < 5) {
+      //focus
+      contentInput.current.focus();
+      return;
+    }
     alert("저장 성공");
   };
 
@@ -26,6 +41,8 @@ const DiaryEditor = () => {
           name="author"
           value={state.author}
           onChange={handleChangeState}
+          ref={authorInput}
+          //authorInput ref 객체를 통해 input 태그에 접근이 가능해짐
         />
       </div>
       <div>
@@ -33,6 +50,7 @@ const DiaryEditor = () => {
           name="content"
           value={state.content}
           onChange={handleChangeState}
+          ref={contentInput}
         />
       </div>
       <div>
