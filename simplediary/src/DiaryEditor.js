@@ -11,7 +11,7 @@ const DiaryEditor = () => {
       <h2>오늘의 일기</h2>
       <div>
         <input
-          name="auhor"
+          name="author"
           value={author}
           onChange={(e) => {
             setAuthor(e.target.value);
