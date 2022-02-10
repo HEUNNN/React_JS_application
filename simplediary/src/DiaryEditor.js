@@ -2,9 +2,10 @@ import { useState } from "react"; //react의 useState 기능
 
 const DiaryEditor = () => {
   //사용자 정보를 입력 받는 기능을 가진 컴포넌트
-
-  const [author, setAuthor] = useState("");
-  const [content, setContent] = useState("");
+  const [state, setState] = useState({
+    author: "",
+    content: "",
+  });
 
   return (
     <div className="DiaryEditor">
@@ -12,18 +13,24 @@ const DiaryEditor = () => {
       <div>
         <input
           name="author"
-          value={author}
+          value={state.author}
           onChange={(e) => {
-            setAuthor(e.target.value);
+            setState({
+              author: e.target.value,
+              content: state.content,
+            });
           }}
         />
       </div>
       <div>
         <textarea
           name="content"
-          value={content}
+          value={state.content}
           onChange={(e) => {
-            setContent(e.target.value);
+            setState({
+              content: e.target.value,
+              author: state.author,
+            });
           }}
         />
       </div>
