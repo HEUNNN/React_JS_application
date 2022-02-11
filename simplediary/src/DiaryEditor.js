@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"; //react의 useState 기능
 //useRef: DOM 요소를 선택할 수 있는 기능 -> react가 제공
 
-const DiaryEditor = () => {
+const DiaryEditor = ({ onCreate }) => {
   //사용자 정보를 입력 받는 기능을 가진 컴포넌트
   const [state, setState] = useState({
     author: "",
@@ -30,7 +30,13 @@ const DiaryEditor = () => {
       contentInput.current.focus();
       return;
     }
+    onCreate(state.author, state.content, state.emotion);
     alert("저장 성공");
+    setState({
+      author: "",
+      content: "",
+      emotion: 1,
+    });
   };
 
   return (
