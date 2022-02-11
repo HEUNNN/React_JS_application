@@ -19,7 +19,7 @@ function App() {
     dataId.current += 1;
     setData([newItem, ...data]);
   };
-  const onDelete = (targetId) => {
+  const onRemove = (targetId) => {
     /* 내가 구현한 코드(삭제 part)
     let n = data.length - 1;
     data.splice(n - targetId, 1);
@@ -31,14 +31,21 @@ function App() {
     });
     */
     console.log(`${targetId}가 삭제되었습니다.`);
-    const newDiaryList = data.filter((it) => it.id !== targetId);
+    const newDiaryList = data.filter((it) => it.id !== targetId); //id값 변화 필요 없다 -> filter 기능 덕분
     setData(newDiaryList);
     console.log(newDiaryList);
+  };
+  const onModify = (targetId, newContent) => {
+    setData(
+      data.map((it) =>
+        it.id === targetId ? { ...it, content: newContent } : it
+      )
+    );
   };
   return (
     <div className="App">
       <DiaryEditor onCreate={onCreate} />
-      <DiaryList diarylst={data} onDelete={onDelete} />
+      <DiaryList diarylst={data} onRemove={onRemove} onModify={onModify} />
     </div>
   );
 }
