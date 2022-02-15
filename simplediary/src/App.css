@@ -1,6 +1,6 @@
 .DiaryEditor h2 {
-  background-color: rgb(253, 253, 165);
   color: rgb(83, 83, 83);
+  font-weight: bold;
 }
 .DiaryEditor {
   border: 1px solid gray;

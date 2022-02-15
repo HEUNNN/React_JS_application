@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
+import LifeCycle from "./LifeCycle";
+import LifeCycleUnMount from "./LifeCycleUnMount";
 
 function App() {
   const [data, setData] = useState([]); //일기 데이터 배열을 저장한다.
@@ -44,6 +46,8 @@ function App() {
   };
   return (
     <div className="App">
+      <LifeCycle />
+      <LifeCycleUnMount />
       <DiaryEditor onCreate={onCreate} />
       <DiaryList diarylst={data} onRemove={onRemove} onModify={onModify} />
     </div>
