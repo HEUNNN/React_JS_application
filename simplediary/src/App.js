@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
-
-//https://jsonplaceholder.typicode.com/comments
+import OptimizeTest2 from "./OptimizeTest2";
 
 function App() {
   const [data, setData] = useState([]); //일기 데이터 배열을 저장한다.
@@ -67,9 +66,25 @@ function App() {
       )
     );
   };
+  const getDiaryAnalysis = useMemo(() => {
+    const goodCount = data.filter((e) => e.emotion >= 3).length; //지역 변수
+    // data에서 emotion이 3이상인 것만 filtering 한 새로운 배열의 length
+    const badCount = data.length - goodCount;
+    const goodRatio = (goodCount / data.length) * 100;
+    return { goodCount, badCount, goodRatio }; //3개의 값을 객체로 return
+  }, [data.length]); //memoization 하고 싶은 함수를 useMemo()로 감싸주면 됨
+  //[data.length] -> data의 길이가 변화할때만 useMemo의 callback 함수(emotion 분석 콜백 함수)가 실행됨 => 최적화
+
+  const { goodCount, badCount, goodRatio } = getDiaryAnalysis; //getDiaryAnalysis()가 결괏값을 객체로 반환하기 때문에 객체 비구조화 할당으로 받음
   return (
     <div className="App">
+      <OptimizeTest2 />
       <DiaryEditor onCreate={onCreate} />
+      <div>전체 일기: {data.length}</div>
+      <div>기분 좋은 일기 개수: {goodCount}</div>
+      <div>기분 나쁜 일기 개수: {badCount}</div>
+      <div>기분 좋은 일기 비율: {goodRatio} %</div>
+
       <DiaryList diarylst={data} onRemove={onRemove} onModify={onModify} />
     </div>
   );
