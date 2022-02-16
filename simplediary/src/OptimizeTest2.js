@@ -6,14 +6,24 @@ const ConterA = React.memo(({ count }) => {
   }); //작동이 되고 있는지 확인하는 함수
   return <div>{count}</div>;
 });
-const CounterB = React.memo(({ obj }) => {
+const CounterB = ({ obj }) => {
   useEffect(() => {
     console.log(`CounterB Update - obj.count: ${obj.count}`);
   });
   return <div>{obj.count}</div>;
   //해당 component는 prop을 객체로 받으며, JS에서는 객체를 비교할때 얕은 비교를 하기 때문에
   //상태가 변한다고  CounterB의 useEffect()가 판단하게 됨
-});
+};
+const areEqual = (prev, next) => {
+  //return true; //prevProps === nextProps -> rerendering 발생 X
+  //return false; //prevProps !== nextProps -> rerendering 발생 O
+  if (prev.obj.count === next.obj.count) {
+    return true;
+  } else {
+    return false;
+  }
+};
+const MemoizedCounterB = React.memo(CounterB, areEqual);
 const OptimizeTest2 = () => {
   const [count, setCount] = useState(0);
   const [obj, setObj] = useState({
@@ -28,7 +38,7 @@ const OptimizeTest2 = () => {
       </div>
       <div>
         <h2>counter B</h2>
-        <CounterB obj={obj} />
+        <MemoizedCounterB obj={obj} />
         <button onClick={() => setObj({ count: obj.count })}>B button</button>
       </div>
     </div>
