@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const DiaryItem = ({
   onModify,
@@ -10,6 +10,9 @@ const DiaryItem = ({
   id,
 }) => {
   //prop을 해당 변수 짝 맞춰 받아옴
+  useEffect(() => {
+    console.log(`${id}번 째 아이템 렌더`);
+  });
 
   const [isModify, setIsModify] = useState(false); //isModify의 기본값: false
   const toggleIsModify = () => setIsModify(!isModify);
@@ -72,4 +75,4 @@ const DiaryItem = ({
     </div>
   );
 };
-export default DiaryItem;
+export default React.memo(DiaryItem);

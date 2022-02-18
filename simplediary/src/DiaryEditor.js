@@ -1,8 +1,12 @@
-import { useRef, useState } from "react"; //react의 useState 기능
+import React, { useEffect, useRef, useState } from "react"; //react의 useState 기능
 //useRef: DOM 요소를 선택할 수 있는 기능 -> react가 제공
 
 const DiaryEditor = ({ onCreate }) => {
   //사용자 정보를 입력 받는 기능을 가진 컴포넌트
+  useEffect(() => {
+    console.log("Diary Editor Render");
+    //App.js로 부터 props 받은 onCreate가 App.js에서 호출되어 렌더링 되면 DiaryEditor도 렌더링 됨 -> 낭비
+  });
   const [state, setState] = useState({
     author: "",
     content: "",
@@ -79,4 +83,4 @@ const DiaryEditor = ({ onCreate }) => {
     </div>
   );
 };
-export default DiaryEditor;
+export default React.memo(DiaryEditor); //const DiaryEditor = React.memo(() => {};); 해주어도 됨

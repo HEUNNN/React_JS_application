@@ -1,11 +1,34 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
-import OptimizeTest2 from "./OptimizeTest2";
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "INIT": {
+      return action.data; //새로운 state가 됨
+    }
+    case "CREATE":
+      const created_date = new Date().getTime();
+      const newItem = {
+        ...action.data,
+        created_date,
+      };
+      return [newItem, ...state];
+    case "REMOVE":
+      return state.filter((it) => it.id !== action.targetId);
+    case "MODIFY":
+      return state.map((it) =>
+        it.id === action.targetId ? { ...it, content: action.newContent } : it
+      );
+    default:
+      return state;
+  }
+};
 
 function App() {
-  const [data, setData] = useState([]); //일기 데이터 배열을 저장한다.
+  //const [data, setData] = useState([]); //일기 데이터 배열을 저장한다.
+  const [data, dispatch] = useReducer(reducer, []);
   const dataId = useRef(0);
 
   const getData = async () => {
@@ -24,26 +47,21 @@ function App() {
       };
     });
 
-    setData(initData);
+    dispatch({ type: "INIT", data: initData });
     //20개 추출, map 함수를 사용하여 배열의 각 요소를 순회해서
     //map 함수의 콜백함수에서 반환하는 값을 모아서 배열을 만들고 initData에 대입(return 하기 때문에 .map(() => {}) {} 사용)
   };
   useEffect(() => getData(), []); //mount할때의 life cycle
 
-  const onCreate = (author, content, emotion) => {
+  const onCreate = useCallback((author, content, emotion) => {
     //새로운 일기를 추가하는 함수
-    const created_date = new Date().getTime();
-    const newItem = {
-      author,
-      content,
-      emotion,
-      created_date,
-      id: dataId.current,
-    };
+    dispatch({
+      type: "CREATE",
+      data: { author, content, emotion, id: dataId.current },
+    });
     dataId.current += 1;
-    setData([newItem, ...data]);
-  };
-  const onRemove = (targetId) => {
+  }, []);
+  const onRemove = useCallback((targetId) => {
     /* 내가 구현한 코드(삭제 part)
     let n = data.length - 1;
     data.splice(n - targetId, 1);
@@ -55,17 +73,12 @@ function App() {
     });
     */
     console.log(`${targetId}가 삭제되었습니다.`);
-    const newDiaryList = data.filter((it) => it.id !== targetId); //id값 변화 필요 없다 -> filter 기능 덕분
-    setData(newDiaryList);
-    console.log(newDiaryList);
-  };
-  const onModify = (targetId, newContent) => {
-    setData(
-      data.map((it) =>
-        it.id === targetId ? { ...it, content: newContent } : it
-      )
-    );
-  };
+    //const newDiaryList = data.filter((it) => it.id !== targetId); //id값 변화 필요 없다 -> filter 기능 덕분
+    dispatch({ type: "REMOVE", targetId });
+  }, []);
+  const onModify = useCallback((targetId, newContent) => {
+    dispatch({ type: "MODIFY", targetId, newContent });
+  }, []);
   const getDiaryAnalysis = useMemo(() => {
     const goodCount = data.filter((e) => e.emotion >= 3).length; //지역 변수
     // data에서 emotion이 3이상인 것만 filtering 한 새로운 배열의 length
@@ -78,7 +91,6 @@ function App() {
   const { goodCount, badCount, goodRatio } = getDiaryAnalysis; //getDiaryAnalysis()가 결괏값을 객체로 반환하기 때문에 객체 비구조화 할당으로 받음
   return (
     <div className="App">
-      <OptimizeTest2 />
       <DiaryEditor onCreate={onCreate} />
       <div>전체 일기: {data.length}</div>
       <div>기분 좋은 일기 개수: {goodCount}</div>
