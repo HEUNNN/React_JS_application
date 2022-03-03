@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
@@ -25,9 +31,10 @@ const reducer = (state, action) => {
       return state;
   }
 };
+export const DiaryStateContext = React.createContext();
+export const DiaryDispatchContext = React.createContext();
 
 function App() {
-  //const [data, setData] = useState([]); //일기 데이터 배열을 저장한다.
   const [data, dispatch] = useReducer(reducer, []);
   const dataId = useRef(0);
 
@@ -79,6 +86,12 @@ function App() {
   const onModify = useCallback((targetId, newContent) => {
     dispatch({ type: "MODIFY", targetId, newContent });
   }, []);
+
+  const memoizedDispatches = useMemo(() => {
+    //memoizedDispatch 객체 재생성을 막기 위함
+    return { onCreate, onRemove, onModify };
+  }, []);
+
   const getDiaryAnalysis = useMemo(() => {
     const goodCount = data.filter((e) => e.emotion >= 3).length; //지역 변수
     // data에서 emotion이 3이상인 것만 filtering 한 새로운 배열의 length
@@ -90,15 +103,18 @@ function App() {
 
   const { goodCount, badCount, goodRatio } = getDiaryAnalysis; //getDiaryAnalysis()가 결괏값을 객체로 반환하기 때문에 객체 비구조화 할당으로 받음
   return (
-    <div className="App">
-      <DiaryEditor onCreate={onCreate} />
-      <div>전체 일기: {data.length}</div>
-      <div>기분 좋은 일기 개수: {goodCount}</div>
-      <div>기분 나쁜 일기 개수: {badCount}</div>
-      <div>기분 좋은 일기 비율: {goodRatio} %</div>
-
-      <DiaryList diarylst={data} onRemove={onRemove} onModify={onModify} />
-    </div>
+    <DiaryStateContext.Provider value={data}>
+      <DiaryDispatchContext.Provider value={memoizedDispatches}>
+        <div className="App">
+          <DiaryEditor />
+          <div>전체 일기: {data.length}</div>
+          <div>기분 좋은 일기 개수: {goodCount}</div>
+          <div>기분 나쁜 일기 개수: {badCount}</div>
+          <div>기분 좋은 일기 비율: {goodRatio} %</div>
+          <DiaryList />
+        </div>
+      </DiaryDispatchContext.Provider>
+    </DiaryStateContext.Provider>
   );
 }
 

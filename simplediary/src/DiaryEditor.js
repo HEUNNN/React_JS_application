@@ -1,7 +1,10 @@
-import React, { useEffect, useRef, useState } from "react"; //react의 useState 기능
+import React, { useContext, useEffect, useRef, useState } from "react"; //react의 useState 기능
+import { DiaryDispatchContext } from "./App";
 //useRef: DOM 요소를 선택할 수 있는 기능 -> react가 제공
 
-const DiaryEditor = ({ onCreate }) => {
+const DiaryEditor = () => {
+  const { onCreate } = useContext(DiaryDispatchContext);
+
   //사용자 정보를 입력 받는 기능을 가진 컴포넌트
   useEffect(() => {
     console.log("Diary Editor Render");

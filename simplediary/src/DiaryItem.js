@@ -1,14 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { DiaryDispatchContext } from "./App";
 
-const DiaryItem = ({
-  onModify,
-  onRemove,
-  author,
-  content,
-  created_date,
-  emotion,
-  id,
-}) => {
+const DiaryItem = ({ author, content, created_date, emotion, id }) => {
+  const { onModify, onRemove } = useContext(DiaryDispatchContext);
+
   //prop을 해당 변수 짝 맞춰 받아옴
   useEffect(() => {
     console.log(`${id}번 째 아이템 렌더`);
