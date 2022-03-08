@@ -90,7 +90,7 @@ function App() {
         id: dataId.current,
         emotion,
         content,
-        data: new Date(date).getTime(),
+        date: new Date(date).getTime(),
       },
     });
     dataId.current += 1;
@@ -102,7 +102,7 @@ function App() {
   //EDIT
   const onEdit = (targetId, date, content, emotion) => {
     dispatch({
-      Type: "EDIT",
+      type: "EDIT",
       data: {
         id: targetId,
         emotion,
@@ -121,7 +121,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/new" element={<New />} />
-              <Route path="/edit" element={<Edit />} />
+              <Route path="/edit/:id" element={<Edit />} />
               <Route path="/diary/:id" element={<Diary />} />
             </Routes>
           </div>
