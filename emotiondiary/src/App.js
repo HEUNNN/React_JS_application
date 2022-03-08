@@ -87,11 +87,10 @@ function App() {
     dispatch({
       type: "CREATE",
       data: {
-        //data의 id, emotion 순서 등이 맞아야 한다.
         id: dataId.current,
-        date: new Date(date).getTime(),
         emotion,
         content,
+        data: new Date(date).getTime(),
       },
     });
     dataId.current += 1;
