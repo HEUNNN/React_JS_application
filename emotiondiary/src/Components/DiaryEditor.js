@@ -39,13 +39,13 @@ const getStringDate = (date) => {
 };
 
 const DiaryEditor = () => {
-  const navigate = useNavigate();
   const [date, setDate] = useState(getStringDate(new Date()));
   const [emotion, setEmotion] = useState();
   const [content, setContent] = useState("");
 
   const contentRef = useRef();
 
+  const navigate = useNavigate();
   const handleClickEmotion = (emotion) => {
     setEmotion(emotion);
   };
@@ -56,7 +56,9 @@ const DiaryEditor = () => {
       contentRef.current.focus();
       return;
     }
+    console.log(content);
     onCreate(date, content, emotion);
+
     navigate("/", { replace: true });
   };
   return (

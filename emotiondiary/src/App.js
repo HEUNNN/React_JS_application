@@ -24,6 +24,7 @@ const myReducer = (state, action) => {
         ...action.data,
       };
       newState = [newItem, ...state];
+      console.log(newState);
       break;
     }
     case "REMOVE": {
@@ -86,10 +87,11 @@ function App() {
     dispatch({
       type: "CREATE",
       data: {
+        //data의 id, emotion 순서 등이 맞아야 한다.
         id: dataId.current,
-        data: new Date(date).getTime(),
-        content,
+        date: new Date(date).getTime(),
         emotion,
+        content,
       },
     });
     dataId.current += 1;
@@ -104,9 +106,9 @@ function App() {
       Type: "EDIT",
       data: {
         id: targetId,
-        date: new Date(date).getTime(),
-        content,
         emotion,
+        content,
+        date: new Date(date).getTime(),
       },
     });
   };
