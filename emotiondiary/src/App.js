@@ -113,7 +113,7 @@ function App() {
 
   return (
     <DiaryStateContext.Provider value={data}>
-      <DiaryDispatchContext.Provider>
+      <DiaryDispatchContext.Provider value={{ onCreate, onEdit, onRemove }}>
         <BrowserRouter>
           {/* 브라우저의 URL과 매핑을 위해 사용 */}
           <div className="App">
