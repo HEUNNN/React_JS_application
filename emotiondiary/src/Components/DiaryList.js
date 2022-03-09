@@ -32,13 +32,13 @@ const ControlMenu = ({ value, onChange, optionList }) => {
 
 const DiaryList = ({ diaryList }) => {
   const navigate = useNavigate();
-  const [sortType, setSortType] = useState("lastest");
+  const [sortType, setSortType] = useState("latest");
   const [filterType, setFilterType] = useState("all");
 
   const getProcessedDiaryList = () => {
     const compare = (a, b) => {
       //객체의 정렬에는 비교하는 함수가 필요하다.
-      if (sortType === "lastest") {
+      if (sortType === "latest") {
         return parseInt(b.date) - parseInt(a.date);
       } else {
         return parseInt(a.date) - parseInt(b.date);
