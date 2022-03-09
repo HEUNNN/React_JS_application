@@ -44,6 +44,7 @@ const DiaryEditor = ({ isEdit, originData }) => {
   const handleRemove = () => {
     if (window.confirm(`일기를 삭제하시겠습니까?`)) {
       onRemove(originData.id);
+      navigate("/", { replace: true });
     }
   };
   useEffect(() => {
@@ -66,11 +67,13 @@ const DiaryEditor = ({ isEdit, originData }) => {
           />
         }
         rightChild={
-          <MyButton
-            type={"negative"}
-            text={"삭제하기"}
-            onClick={handleRemove}
-          />
+          isEdit && (
+            <MyButton
+              type={"negative"}
+              text={"삭제하기"}
+              onClick={handleRemove}
+            />
+          )
         }
       />
       <div>
