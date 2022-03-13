@@ -11,6 +11,11 @@ const Home = () => {
   const [currDate, setCurrDate] = useState(new Date());
   const headText = `${currDate.getFullYear()}년 ${currDate.getMonth() + 1}월`;
 
+  useEffect(() => {
+    const titleElement = document.getElementsByTagName("title")[0];
+    titleElement.innerHTML = `Emotion Diary - Home`;
+  }, []);
+
   //Month가 변하면 일기 list도 변한다 -> useEffect 사용
   useEffect(() => {
     if (diaryList.length >= 1) {
